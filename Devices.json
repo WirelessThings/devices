@@ -1,0 +1,109 @@
+{
+    "Version":150811
+    "PortocolVersion":2.0,
+    "Devices":[
+               {
+               "DTY":"AAAB01",
+               "Name":"Temperature Sensor SB-CA",
+               "Description":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut tempus turpis sit amet diam auctor, ac semper dui sollicitudin. Pellentesque at semper lorem. Vivamus scelerisque id elit in porttitor. Sed eget condimentum dolor. Nunc sollicitudin.",
+               "SleepMode":"Cyclic",
+               "ReadingPeriod":1,
+               "PowerClass":"SB",
+               "AntennaClass":"CA",
+               "Actions":[
+                          {
+                          "Command":"TEMP",
+                          "Description":"Request Temperature",
+                          "Format":"Float",
+                          "Type":"Polled"
+                          },
+                          {
+                          "Command":"TMPA",
+                          "Description":"Request Temperature",
+                          "Format":"Float",
+                          "Type":"Both"
+                          }
+                          ],
+               "Options":[
+                          {
+                          "Command":"BVAL",
+                          "Description":"Beta Value of Thermistor",
+                          "Format":"Int"
+                          },
+                          {
+                          "Command":"RNOM",
+                          "Description":"Resistance at 20C",
+                          "Format":"Int"
+                          },
+                          {
+                          "Command":"IR",
+                          "Description":"Internal Resistance",
+                          "Format":"Int"
+                          },
+                          {
+                          "Command":"SRES",
+                          "Description":"Series Resistance",
+                          "Format":"Int"
+                          }
+                          ]
+               },
+               {
+               "DTY":"AAAB02",
+               "Name":"Temperature Sensor SB-CA",
+               "Description":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut tempus turpis sit amet diam auctor, ac semper dui sollicitudin. Pellentesque at semper lorem. Vivamus scelerisque id elit in porttitor. Sed eget condimentum dolor. Nunc sollicitudin.",
+               "SleepMode":"Cyclic",
+               "ReadingPeriod":1,
+               "PowerClass":"SB",
+               "AntennaClass":"CA",
+               "Actions":[
+                          {
+                          "Command":"TEMP",
+                          "Description":"Request Temperature",
+                          "Format":"Float",
+                          "Type":"Both"
+                          }
+                          ],
+               "Options":[
+                          {
+                          "Command":"BVAL",
+                          "Description":"Beta Value of Thermistor",
+                          "Format":"Int"
+                          },
+                          {
+                          "Command":"RNOM",
+                          "Description":"Resistance at 20C",
+                          "Format":"Int"
+                          },
+                          {
+                          "Command":"IR",
+                          "Description":"Internal Resistance",
+                          "Format":"Int"
+                          },
+                          {
+                          "Command":"SRES",
+                          "Description":"Series Resistance",
+                          "Format":"Int"
+                          }
+                          ]
+               },
+               {
+               "DTY":"AAAB03",
+               "Name":"Temperature Sensor SB-CA",
+               "Description":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut tempus turpis sit amet diam auctor, ac semper dui sollicitudin. Pellentesque at semper lorem. Vivamus scelerisque id elit in porttitor. Sed eget condimentum dolor. Nunc sollicitudin.",
+               "SleepMode":"Cyclic",
+               "ReadingPeriod":1,
+               "PowerClass":"SB",
+               "AntennaClass":"CA",
+               "Actions":[
+                          {
+                          "Command":"TEMP",
+                          "Description":"Request Temperature",
+                          "Format":"Float",
+                          "Type":"Both"
+                          }
+                          ],
+               "Options":[
+               ]
+               }
+               ]
+}
