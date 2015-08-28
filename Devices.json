@@ -106,6 +106,26 @@
                           ],
                "Options":[
                ]
+               },
+               {
+               "DTY":"AAAD01",
+               "Name":"Ambient Light Level Sensor",
+               "Description":"This Ambient Light Sensor device sends periodic readings of light as a percentage.",
+               "LongDescription":"Using a light dependent resistor (LDR), this wireless light sensor measures and sends you periodical readings, of the ambient light level of its environment. The ligth level is represented as a percentage, with 100% being very bright and 0% very dark. The internal coin cell battery is capable of running for well in excess of 10 years (based on 1 reading per hour).",
+               "SleepMode":"Cyclic",
+               "ReadingPeriod":1,
+               "PowerClass":"SB",
+               "AntennaClass":"CA",
+               "Actions":[
+                          {
+                          "Command":"LVAL",
+                          "Description":"Request light level",
+                          "Format":"Int",
+                          "Type":"Both"
+                          }
+                          ],
+               "Options":[
+               ]
                }
                ]
 }
