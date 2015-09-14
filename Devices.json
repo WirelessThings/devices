@@ -13,13 +13,13 @@
                "Actions":[
                           {
                           "Command":"TEMP",
-                          "Description":"Request Temperature",
+                          "Description":"Return the temperature in degrees centigrade",
                           "Format":"Float",
                           "Type":"Polled"
                           },
                           {
                           "Command":"TMPA",
-                          "Description":"Request Temperature",
+                          "Description":"Return the temperature in degrees centigrade",
                           "Format":"Float",
                           "Type":"Both"
                           }
@@ -59,7 +59,7 @@
                "Actions":[
                           {
                           "Command":"TEMP",
-                          "Description":"Request Temperature",
+                          "Description":"Return the temperature in degrees centigrade",
                           "Format":"Float",
                           "Type":"Both"
                           }
@@ -99,7 +99,7 @@
                "Actions":[
                           {
                           "Command":"TEMP",
-                          "Description":"Request Temperature",
+                          "Description":"Return the temperature in degrees centigrade",
                           "Format":"Float",
                           "Type":"Both"
                           }
@@ -111,7 +111,7 @@
                "DTY":"AAAD01",
                "Name":"Ambient Light Level Sensor",
                "Description":"This Ambient Light Sensor device sends periodic readings of light as a percentage.",
-               "LongDescription":"Using a light dependent resistor (LDR), this wireless light sensor measures and sends you periodical readings, of the ambient light level of its environment. The ligth level is represented as a percentage, with 100% being very bright and 0% very dark. The internal coin cell battery is capable of running for well in excess of 10 years (based on 1 reading per hour).",
+               "LongDescription":"Using a light dependent resistor (LDR), this wireless light sensor measures and sends you periodical readings, of the ambient light level of its environment. The light level is represented as a percentage, with 100% being very bright and 0% very dark. The internal coin cell battery is capable of running for well in excess of 10 years (based on 1 reading per hour).",
                "SleepMode":"Cyclic",
                "ReadingPeriod":1,
                "PowerClass":"SB",
@@ -119,8 +119,34 @@
                "Actions":[
                           {
                           "Command":"LVAL",
-                          "Description":"Request light level",
+                          "Description":"Return the light level as a percentage",
                           "Format":"Int",
+                          "Type":"Both"
+                          }
+                          ],
+               "Options":[
+               ]
+               },
+               {
+               "DTY":"AAAN01",
+               "Name":"Humidity and Temperature SB-CA",
+               "Description":"This Humidity and Temperature Sensor device sends periodic readings of relative humidity and temperature in degrees centigrade.",
+               "LongDescription":"Using a Sensirion SHT21 sensor, this device measures and sends you periodical readings, of both the humidity and temperature of its environment. The humidity level is represented as relative humidity RH and temperature is in degrees centigrade.",
+               "SleepMode":"Cyclic",
+               "ReadingPeriod":1,
+               "PowerClass":"LB",
+               "AntennaClass":"CA",
+               "Actions":[
+                          {
+                          "Command":"RHUM",
+                          "Description":"Return the current relative humidity reading",
+                          "Format":"Float",
+                          "Type":"Both"
+                          },
+                          {
+                          "Command":"TEMP",
+                          "Description":"Return the current temperature in degrees centigrade",
+                          "Format":"Float",
                           "Type":"Both"
                           }
                           ],
