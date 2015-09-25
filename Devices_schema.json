@@ -1,204 +1,208 @@
 {
-    "$schema": "http://json-schema.org/draft-04/schema#",
-    "id": "http://devices.wirelessthings.net/Devices_schema.json",
-    "title": "Language of Things device descriptions",
-    "description": "Used to describe Language of Things devices and there commands",
-    "required": ["Version", "Devices"],
-    "type": "object",
-    "aditionalProperties": false,
-    "properties": {
-        "Version": {
-            "type" : "integer",
-            "description": "The version of the file, base on generation date in format YYMMDD"
-        },
-        "Devices" : {
-            "type": "array",
-            "description": "Array of devices",
-            "minItems": 1,
-            "items": { 
-                "$ref": "#/definitions/device"
+   "$schema":"http://json-schema.org/draft-04/schema#",
+   "id":"http://devices.wirelessthings.net/Devices_schema.json",
+   "title":"Language of Things device descriptions",
+   "description":"Used to describe Language of Things devices and there commands",
+   "required":[
+      "Version",
+      "Devices"
+   ],
+   "type":"object",
+   "aditionalProperties":false,
+   "properties":{
+      "Version":{
+         "type":"integer",
+         "description":"The version of the file, base on generation date in format YYMMDD"
+      },
+      "Devices":{
+         "type":"array",
+         "description":"Array of devices",
+         "minItems":1,
+         "items":{
+            "$ref":"#/definitions/device"
+         },
+         "aditionalItems":false
+      }
+   },
+   "definitions":{
+      "device":{
+         "type":"object",
+         "description":"A single device entry",
+         "properties":{
+            "DTY":{
+               "description":"Used to identify a device",
+               "type":"string"
             },
-            "aditionalItems": false     
-        }
-    },            
-    "definitions": {
-        "device": {
-            "type": "object",
-            "description": "A single device entry",
-            "properties": {
-                "DTY": {
-                    "description": "Used to identify a device",
-                    "type": "string"
-                },
-                "Name": {
-                    "description": "Name of the device",
-                    "type": "string"
-                },
-                "Description": {
-                    "description": "Short Description of the device",
-                    "type": "string"
-                },
-                "LongDescription": {
-                    "description": "Long Description",
-                    "type": "string"
-                },
-                "SleepMode": {
-                    "$ref": "#/definitions/sleepMode"
-                  
-                },
-                "ReadingPeriod": {
-                    "description": "Recomended default reading period for the device",
-                    "type": "integer",
-                    "minimun": 1,
-                    "maximum": 10
-                },
-                "PowerClass": {
-                    "$ref": "#/definitions/powerClass"
-                },
-                "AntennaClass": {
-                    "$ref": "#/definitions/antennaClass"
-                },
-                "Actions": {
-                    "description": "Action commands supported by this device",
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/actionCommand"
-                    },
-                    "additionalItems": false
-                },
-                "Options": {
-                    "description": "Options that can be set on this device",
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/optionCommand"
-                    },
-                    "additionalItems": false
-                }
+            "Name":{
+               "description":"Name of the device",
+               "type":"string"
             },
-            "additionalProperties": false,
-            "required": [
-                "DTY",
-                "Name",
-                "Description",
-                "LongDescription",
-                "SleepMode",
-                "Actions",
-                "Options"
-            ]
-        },
-        "actionCommand": {
-            "type": "object",
-            "description": "A single action command entry, action commands are ...",
-            "properties": {
-                "Command": {
-                    "type": "string",
-                    "description": "Command Name",
-                    "$ref": "#/definitions/validDataCharacters"
-                },
-                "Description": {
-                    "type": "string",
-                    "description": "Command dsecription"
-                },
-                "Format": {
-                    "$ref": "#/definitions/format"
-                },
-                "Type": {
-                    "type": "string",
-                    "description": "Type of action, how this command can be used by the user or the device",
-                    "oneOf": [
-                        {"enum": ["Polled"], "description":"This message is a command use to query or set a value"},
-                        {"enum": ["Announce"], "description":"This message may be sent by the device at any time to report a value"},
-                        {"enum": ["Both"], "description":"This message may be sent by the device at any time to report a value, or a used to query or set a value"}
-                    ]
-                } 
+            "Description":{
+               "description":"Short Description of the device",
+               "type":"string"
             },
-            "required": [
-                "Command",
-                "Description",
-                "Format",
-                "Type"
-            ],
-            "additionalProperties": false
-        },
-        "optionCommand": {
-            "type": "object",
-            "description": "A single option command entry, option commands are ...",
-            "properties": {
-                "Command": {
-                    "type": "string",
-                    "description": "Command Name",
-                    "$ref": "#/definitions/validDataCharacters"
-                },
-                "Description": {
-                    "type": "string",
-                    "description": "Command dsecription"
-                },
-                "Format": {
-                    "$ref": "#/definitions/format"
-                }    
+            "LongDescription":{
+               "description":"Long Description",
+               "type":"string"
             },
-            "required": [
-                "Command",
-                "Description",
-                "Format"
-            ],
-            "additionalProperties": false
-
-        },
-        "sleepMode": {
-            "type": "string",
-            "description": "Sleep mode which is supported by a device",
-            "oneOf": [
-                {"enum": ["Cyclic"], "description": "Cyclic sleeping devices sleep for a period of time, then wake up, send a reading and go back to sleep, starting the cycle over again. The length of the sleep period is set via the INTVL command. After a number of wakes (as set by WAKEC) it will also send an AWAKE message and a BATT reading and then listen for 100 milliseconds, if no message is received the device sends a SLEEPING message and returns to sleep."},
-                {"enum": ["Interrupt"], "description": "Interrupt sleeping device will sleep until an external interrupt is received. e.g. A button press"},
-                {"enum": ["Polled"], "description": "Polled sleeping device can be told to sleep for a period of time (SlEEP command), after which they will return to an awake state."}
-
-            ]
-        },
-        "powerClass": {
-            "type": "string",
-            "description": "Describes the type of power source used by a device",
-            "oneOf": [
-                {"enum": ["SB"], "description": "Small battery, typically a user replaceable CR2032"},
-                {"enum": ["LB"], "description": "Large Battery"},
-                {"enum": ["RB"], "description": "Rechargeable Battery"},
-                {"enum": ["MP"], "description": "Mains Power (240V)"},
-                {"enum": ["SP"], "description": "Solar Power"},
-                {"enum": ["DC"], "description": "DC Power"}
-            ]
-        },
-        "antennaClass": {
-            "type": "string",
-            "description": "Describes the default antenna of a device",
-            "oneOf": [
-                {"enum": ["CA"], "description": "Chip antenna"},
-                {"enum": ["WA"], "description": "Wire Antenna"},
-                {"enum": ["XA"], "description": "External Antenna"}
-            ]
-        },    
-        "format": {
-            "type": "string",
-            "description": "Format of a value that can be combined with a Language of Things command",
-            "oneOf": [
-                {"enum": ["None"],"description": "No argument is needed or supported for this command"},
-                {"enum": ["String"], "description": "String of any valid Language of Things data characters"},
-                {"enum": ["Float"], "description": "Floating point number"},
-                {"enum": ["Int"], "description": "Whole number (integer)"},
-                {"enum": ["ONOFF"], "description": "Either ON or OFF (boolean)"},
-                {"enum": ["ONOFFTOG"], "description": "Either ON, OFF or TOG. (TOG switches the current value between ON or OFF)"},
-                {"enum": ["ID"], "description": "Two character device ID of any valid Language of Things ID characters"},
-                {"enum": ["Hex"], "description": "Hexadecimal value"},
-                {"enum": ["ReadOnlyHex"], "description": "Hexadecimal value that can only be read"},
-                {"enum": ["Period"], "description": "Period of time represented as 3 digit value and period multiplier of T(milli seconds), S(seconds), M(minutes), H(hours), D(days)"},
-                {"enum": ["SleepMode"], "description": "Sleep mode represented as one of the follow. Sleep Off = 0 \n Interrupt = 8 \n Cyclic = 16 \n Polled = 32"},
-                {"enum": ["ENKey"], "description": "Hexadecimal string when sent to a radio, ACK in response"}
-            ]
-        },
-        "validIDCharacters": {
-            "pattern": "^[A-Z0-9\\-@?*\\\\]+$"
-        },
-        "validDataCharacters": {
-            "pattern": "^[A-Z0-9 !#$%&'()*+,.:;<=>?@_`{|}~\"\\-\\[\\]^\\\\\/]+$"
-        }
-    }
+            "SleepMode":{
+               "$ref":"#/definitions/sleepMode"
+            },
+            "ReadingPeriod":{
+               "description":"Recomended default reading period for the device",
+               "type":"integer",
+               "minimun":1,
+               "maximum":10
+            },
+            "PowerClass":{
+               "$ref":"#/definitions/powerClass"
+            },
+            "AntennaClass":{
+               "$ref":"#/definitions/antennaClass"
+            },
+            "Actions":{
+               "description":"Action commands supported by this device",
+               "type":"array",
+               "items":{
+                  "$ref":"#/definitions/actionCommand"
+               },
+               "additionalItems":false
+            },
+            "Options":{
+               "description":"Options that can be set on this device",
+               "type":"array",
+               "items":{
+                  "$ref":"#/definitions/optionCommand"
+               },
+               "additionalItems":false
+            }
+         },
+         "additionalProperties":false,
+         "required":[
+            "DTY",
+            "Name",
+            "Description",
+            "LongDescription",
+            "SleepMode",
+            "Actions",
+            "Options"
+         ]
+      },
+      "actionCommand":{
+         "type":"object",
+         "description":"A single action command entry, action commands are ...",
+         "properties":{
+            "Command":{
+               "type":"string",
+               "description":"Command Name",
+               "$ref":"#/definitions/validDataCharacters"
+            },
+            "Description":{
+               "type":"string",
+               "description":"Command dsecription"
+            },
+            "Format":{
+               "$ref":"#/definitions/format"
+            },
+            "Type":{
+               "type":"string",
+               "description":"Type of action, how this command can be used by the user or the device",
+               "oneOf":[
+                  {"enum":["Polled"]," description":"This message is a command use to query or set a value"},
+                  {"enum":["Announce"], "description":"This message may be sent by the device at any time to report a value"},
+                  {"enum":["Both"], "description":"This message may be sent by the device at any time to report a value, or a used to query or set a value"}
+               ]
+            }
+         },
+         "required":[
+            "Command",
+            "Description",
+            "Format",
+            "Type"
+         ],
+         "additionalProperties":false
+      },
+      "optionCommand":{
+         "type":"object",
+         "description":"A single option command entry, option commands are ...",
+         "properties":{
+            "Command":{
+               "type":"string",
+               "description":"Command Name",
+               "$ref":"#/definitions/validDataCharacters"
+            },
+            "Description":{
+               "type":"string",
+               "description":"Command dsecription"
+            },
+            "Format":{
+               "$ref":"#/definitions/format"
+            }
+         },
+         "required":[
+            "Command",
+            "Description",
+            "Format"
+         ],
+         "additionalProperties":false
+      },
+      "sleepMode":{
+         "type":"string",
+         "description":"Sleep mode which is supported by a device",
+         "oneOf":[
+            {"enum":["Cyclic"], "description":"Cyclic sleeping devices sleep for a period of time, then wake up, send a reading and go back to sleep, starting the cycle over again. The length of the sleep period is set via the INTVL command. After a number of wakes (as set by WAKEC) it will also send an AWAKE message and a BATT reading and then listen for 100 milliseconds, if no message is received the device sends a SLEEPING message and returns to sleep."},
+            {"enum":["Interrupt"], "description":"Interrupt sleeping device will sleep until an external interrupt is received. e.g. A button press"},
+            {"enum":["Polled"], "description":"Polled sleeping device can be told to sleep for a period of time (SlEEP command), after which they will return to an awake state."}
+         ]
+      },
+      "powerClass":{
+         "type":"string",
+         "description":"Describes the type of power source used by a device",
+         "oneOf":[
+            {"enum":["SB"], "description":"Small battery, typically a user replaceable CR2032"},
+            {"enum":["LB"], "description":"Large Battery"},
+            {"enum":["RB"], "description":"Rechargeable Battery"},
+            {"enum":["MP"], "description":"Mains Power (240V)"},
+            {"enum":["SP"], "description":"Solar Power"},
+            {"enum":["DC"], "description":"DC Power"
+            }
+         ]
+      },
+      "antennaClass":{
+         "type":"string",
+         "description":"Describes the default antenna of a device",
+         "oneOf":[
+            {"enum":["CA"], "description":"Chip antenna"},
+            {"enum":["WA"], "description":"Wire Antenna"},
+            {"enum":["XA"], "description":"External Antenna"
+            }
+         ]
+      },
+      "format":{
+         "type":"string",
+         "description":"Format of a value that can be combined with a Language of Things command",
+         "oneOf":[
+            {"enum":["None"], "description":"No argument is needed or supported for this command"},
+            {"enum":["String"], "description":"String of any valid Language of Things data characters"},
+            {"enum":["Float"], "description":"Floating point number"},
+            {"enum":["Int"], "description":"Whole number (integer)"},
+            {"enum":["ONOFF"], "description":"Either ON or OFF (boolean)"},
+            {"enum":["ONOFFTOG"], "description":"Either ON, OFF or TOG. (TOG switches the current value between ON or OFF)"},
+            {"enum":["ID"], "description":"Two character device ID of any valid Language of Things ID characters"},
+            {"enum":["Hex"], "description":"Hexadecimal value"
+            },
+            {{"enum":["ReadOnlyHex"], "description":"Hexadecimal value that can only be read"
+                  },
+            {"enum":["Period"], "description":"Period of time represented as 3 digit value and period multiplier of T(milli seconds), S(seconds), M(minutes), H(hours), D(days)"},
+            {"enum":["SleepMode"], "description":"Sleep mode represented as one of the follow. Sleep Off = 0 \n Interrupt = 8 \n Cyclic = 16 \n Polled = 32"},
+            {"enum":["ENKey"], "description":"Hexadecimal string when sent to a radio, ACK in response"}
+         ]
+      },
+      "validIDCharacters":{
+         "pattern":"^[A-Z0-9\\-@?*\\\\]+$"
+      },
+      "validDataCharacters":{
+         "pattern":"^[A-Z0-9 !#$%&'()*+,.:;<=>?@_`{|}~\"\\-\\[\\]^\\\\\/]+$"
+      }
+   }
 }
