@@ -1,5 +1,5 @@
 {
-    "Version":150821,
+    "Version":150925,
     "Devices":[
                {
                "DTY":"AAAB01",
@@ -129,7 +129,7 @@
                },
                {
                "DTY":"AAAN01",
-               "Name":"Humidity and Temperature SB-CA",
+               "Name":"Humidity and Temperature",
                "Description":"This Humidity and Temperature Sensor device sends periodic readings of relative humidity and temperature in degrees centigrade.",
                "LongDescription":"Using a Sensirion SHT21 sensor, this device measures and sends you periodical readings, of both the humidity and temperature of its environment. The humidity level is represented as relative humidity RH and temperature is in degrees centigrade.",
                "SleepMode":"Cyclic",

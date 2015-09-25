@@ -1,0 +1,197 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "http://devices.wirelessthings.net/Devices_schema.json",
+    "title": "Language of Things device descriptions",
+    "description": "Used to describe Language of Things devices and there commands",
+    "required": ["Version", "Devices"],
+    "type": "object",
+    "aditionalProperties": false,
+    "properties": {
+        "Version": {
+            "type" : "integer",
+            "description": "The version of the file, base on generation date in format YYMMDD"
+        },
+        "Devices" : {
+            "type": "array",
+            "description": "Array of devices",
+            "minItems": 1,
+            "items": { 
+                "$ref": "#/definitions/device"
+            },
+            "aditionalItems": false     
+        }
+    },            
+    "definitions": {
+        "device": {
+            "type": "object",
+            "description": "A single device entry",
+            "properties": {
+                "DTY": {
+                  "description": "DTY identify a device",
+                  "type": "string"
+                },
+                "Name": {
+                  "description": "Name",
+                  "type": "string"
+                },
+                "Description": {
+                  "description": "Description",
+                  "type": "string"
+                },
+                "LongDescription": {
+                  "description": "LongDescription",
+                  "type": "string"
+                },
+                "SleepMode": {
+                  "description": "SleepMode",
+                  "type": "string"
+                },
+                "ReadingPeriod": {
+                  "description": "ReadingPeriod",
+                  "type": "integer",
+                  "minimun": 1,
+                  "maximum": 10
+                },
+                "PowerClass": {
+                  "description": "PowerClass",
+                  "type": "string"
+                },
+                "AntennaClass": {
+                  "description": "AntennaClass",
+                  "type": "string"
+                },
+                "Actions": {
+                  "description": "Actions",
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/actionCommand"
+                  },
+                  "additionalItems": false
+                },
+                "Options": {
+                  "description": "Options",
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/optionCommand"
+                  },
+                  "additionalItems": false
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "DTY",
+                "Name",
+                "Description",
+                "LongDescription",
+                "SleepMode",
+                "Actions",
+                "Options"
+            ]
+        },
+        "actionCommand": {
+            "type": "object",
+            "description": "A single action command entry, action commands are ...",
+            "properties": {
+                "Command": {
+                    "type": "string",
+                    "description": "Command Name",
+                    "$ref": "#/definitions/validCharacters/data"
+                },
+                "Description": {
+                    "type": "string",
+                    "description": "Command dsecription",
+                },
+                "Format": {
+                    "$ref": "#/definitions/format"
+                },
+                "Type": {
+                    "type": "string",
+                    "description": "Type of action, how this command can be used by the user or the device",
+                    "oneOf": [
+                        {"enum": ["Polled"], "description":"This message is a command use to query or set a value"},
+                        {"enum": ["Announce"], "description":"This message may be sent by the device at any time to report a value"},
+                        {"enum": ["Both"], "description":"This message may be sent by the device at any time to report a value, or a used to query or set a value"}
+                    ]
+                } 
+            },
+            "required": [
+                "Command",
+                "Description",
+                "Format",
+                "Type"
+            ],
+            "additionalProperties": false
+        },
+        "optionCommand": {
+            "type": "object",
+            "description": "A single option command entry, option commands are ...",
+            "properties": {
+               "Command": {
+                    "type": "string",
+                    "description": "Command Name",
+                    "$ref": "#/definitions/validCharacters/data"
+                },
+                "Description": {
+                    "type": "string",
+                    "description": "Command dsecription",
+                },
+                "Format": {
+                    "$ref": "#/definitions/format"
+                }    
+            },
+            "required": [
+                "Command",
+                "Description",
+                "Format"
+            ],
+            "additionalProperties": false
+
+        },
+        "PowerClass": {
+            "type": "string",
+            "description": "Describes the type of power source used by a device",
+            "oneOf": [
+                {"enum": ["SB"], "description": "Small battery, typically a user replaceable CR2032"},
+                {"enum": ["LB"], "description": "Large Battery"},
+                {"enum": ["RB"], "description": "Rechargeable Battery"},
+                {"enum": ["MP"], "description": "Mains Power (240V)"},
+                {"enum": ["SP"], "description": "Solar Power"},
+                {"enum": ["DC"], "description": "DC Power"}
+            ]
+        },
+        "antennaClass": {
+            "type": "string",
+            "description": "Describes the default antenna of a device",
+            "oneOf": [
+                {"enum": ["CA"], "description": "Chip antenna"},
+                {"enum": ["WA"], "description": "Wire Antenna"},
+                {"enum": ["XA"], "description": "External Antenna"}
+            ]
+        },    
+        "format": {
+            "type": "string",
+            "description": "Format of a value that can be combined with a Language of Things command",
+            "oneOf": [
+                {"enum": ["None"],"description": "No argument is needed or supported for this command"},
+                {"enum": ["String"], "description": "String of any valid Language of Things data characters"},
+                {"enum": ["Float"], "description": "Floating point number"},
+                {"enum": ["Int"], "description": "Whole number (integer)"},
+                {"enum": ["ONOFF"], "description": "Either ON or OFF (boolean)"},
+                {"enum": ["ONOFFTOG"], "description": "Either ON, OFF or TOG. (TOG switches the current value between ON or OFF)"},
+                {"enum": ["ID"], "description": "Two character device ID of any valid Language of Things ID characters"},
+                {"enum": ["Hex"], "description": "Hexadecimal value"},
+                {"enum": ["ReadOnlyHex"], "description": "Hexadecimal value that can only be read"},
+                {"enum": ["Period"], "description": "Period of time represented as 3 digit value and period multiplier of T(milli seconds), S(seconds), M(minutes), H(hours), D(days)"},
+                {"enum": ["SleepMode"], "description": "Sleep mode represented as one of the follow. Sleep Off = 0 \n Interrupt = 8 \n Cyclic = 16 \n Polled = 32"},
+                {"enum": ["ENKey"], "description": "Hexadecimal string when sent to a radio, ACK in response"}
+        },
+        "validCharacters": {
+            "id": {
+                "pattern": "^[A-Z0-9\-@?\\*]+$"
+            },
+            "data": {
+                "pattern": "^[A-Z0-9 !#$%&'()*+,.:;<=>?@_`{|}~\"\\-\\[\\]^\\\/]+$"
+            }
+        }
+    }
+}
