@@ -27,54 +27,52 @@
             "description": "A single device entry",
             "properties": {
                 "DTY": {
-                  "description": "DTY identify a device",
-                  "type": "string"
+                    "description": "Used to identify a device",
+                    "type": "string"
                 },
                 "Name": {
-                  "description": "Name",
-                  "type": "string"
+                    "description": "Name of the device",
+                    "type": "string"
                 },
                 "Description": {
-                  "description": "Description",
-                  "type": "string"
+                    "description": "Short Description of the device",
+                    "type": "string"
                 },
                 "LongDescription": {
-                  "description": "LongDescription",
-                  "type": "string"
+                    "description": "Long Description",
+                    "type": "string"
                 },
                 "SleepMode": {
-                  "description": "SleepMode",
-                  "type": "string"
+                    "$ref": "#/definitions/sleepMode"
+                  
                 },
                 "ReadingPeriod": {
-                  "description": "ReadingPeriod",
-                  "type": "integer",
-                  "minimun": 1,
-                  "maximum": 10
+                    "description": "Recomended default reading period for the device",
+                    "type": "integer",
+                    "minimun": 1,
+                    "maximum": 10
                 },
                 "PowerClass": {
-                  "description": "PowerClass",
-                  "type": "string"
+                    "$ref": "#/definitions/powerClass"
                 },
                 "AntennaClass": {
-                  "description": "AntennaClass",
-                  "type": "string"
+                    "$ref": "#/definitions/antennaClass"
                 },
                 "Actions": {
-                  "description": "Actions",
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/actionCommand"
-                  },
-                  "additionalItems": false
+                    "description": "Action commands supported by this device",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/actionCommand"
+                    },
+                    "additionalItems": false
                 },
                 "Options": {
-                  "description": "Options",
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/optionCommand"
-                  },
-                  "additionalItems": false
+                    "description": "Options that can be set on this device",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/optionCommand"
+                    },
+                    "additionalItems": false
                 }
             },
             "additionalProperties": false,
@@ -95,11 +93,11 @@
                 "Command": {
                     "type": "string",
                     "description": "Command Name",
-                    "$ref": "#/definitions/validCharacters/data"
+                    "$ref": "#/definitions/validDataCharacters"
                 },
                 "Description": {
                     "type": "string",
-                    "description": "Command dsecription",
+                    "description": "Command dsecription"
                 },
                 "Format": {
                     "$ref": "#/definitions/format"
@@ -126,14 +124,14 @@
             "type": "object",
             "description": "A single option command entry, option commands are ...",
             "properties": {
-               "Command": {
+                "Command": {
                     "type": "string",
                     "description": "Command Name",
-                    "$ref": "#/definitions/validCharacters/data"
+                    "$ref": "#/definitions/validDataCharacters"
                 },
                 "Description": {
                     "type": "string",
-                    "description": "Command dsecription",
+                    "description": "Command dsecription"
                 },
                 "Format": {
                     "$ref": "#/definitions/format"
@@ -147,7 +145,17 @@
             "additionalProperties": false
 
         },
-        "PowerClass": {
+        "sleepMode": {
+            "type": "string",
+            "description": "Sleep mode which is supported by a device",
+            "oneOf": [
+                {"enum": ["Cyclic"], "description": "Cyclic sleeping devices sleep for a period of time, then wake up, send a reading and go back to sleep, starting the cycle over again. The length of the sleep period is set via the INTVL command. After a number of wakes (as set by WAKEC) it will also send an AWAKE message and a BATT reading and then listen for 100 milliseconds, if no message is received the device sends a SLEEPING message and returns to sleep."},
+                {"enum": ["Interrupt"], "description": "Interrupt sleeping device will sleep until an external interrupt is received. e.g. A button press"},
+                {"enum": ["Polled"], "description": "Polled sleeping device can be told to sleep for a period of time (SlEEP command), after which they will return to an awake state."}
+
+            ]
+        },
+        "powerClass": {
             "type": "string",
             "description": "Describes the type of power source used by a device",
             "oneOf": [
@@ -184,14 +192,13 @@
                 {"enum": ["Period"], "description": "Period of time represented as 3 digit value and period multiplier of T(milli seconds), S(seconds), M(minutes), H(hours), D(days)"},
                 {"enum": ["SleepMode"], "description": "Sleep mode represented as one of the follow. Sleep Off = 0 \n Interrupt = 8 \n Cyclic = 16 \n Polled = 32"},
                 {"enum": ["ENKey"], "description": "Hexadecimal string when sent to a radio, ACK in response"}
+            ]
         },
-        "validCharacters": {
-            "id": {
-                "pattern": "^[A-Z0-9\-@?\\*]+$"
-            },
-            "data": {
-                "pattern": "^[A-Z0-9 !#$%&'()*+,.:;<=>?@_`{|}~\"\\-\\[\\]^\\\/]+$"
-            }
+        "validIDCharacters": {
+            "pattern": "^[A-Z0-9\\-@?*\\\\]+$"
+        },
+        "validDataCharacters": {
+            "pattern": "^[A-Z0-9 !#$%&'()*+,.:;<=>?@_`{|}~\"\\-\\[\\]^\\\\\/]+$"
         }
     }
 }
