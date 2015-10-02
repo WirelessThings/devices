@@ -155,6 +155,35 @@
          "Options":[
 
          ]
+      },
+      {
+         "DTY":"AAAV01",
+         "Name":"Button KeyFob",
+         "Description":"Note pressing and holding any button for 5 seconds will enter config mode (this is in addition to the normal config button).",
+         "LongDescription":"Note pressing and holding any button for 5 seconds will enter config mode (this is in addition to the normal config button).",
+         "SleepMode":"Interrupt",
+         "PowerClass":"SB",
+         "AntennaClass":"CA",
+         "Actions":[
+            {
+               "Command":"BUTTON",
+               "Description":"Indicates which button has been pressed [A-E], note actual command name can be set via MSG option",
+               "Format":"String",
+               "Type":"Announce"
+            }
+         ],
+         "Options":[
+            {
+               "Command":"MSG",
+               "Description":"Set message for the button press (Default BUTTON)",
+               "Format":"String"
+            },
+            {
+               "Command":"DEB",
+               "Description":"Button debounce in mS (Default 50)",
+               "Format":"Int"
+            }
+         ]
       }
    ]
 }
