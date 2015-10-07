@@ -8,7 +8,7 @@
       "Devices"
    ],
    "type":"object",
-   "aditionalProperties":false,
+   "additionalProperties":false,
    "properties":{
       "Version":{
          "type":"integer",
@@ -21,7 +21,7 @@
          "items":{
             "$ref":"#/definitions/device"
          },
-         "aditionalItems":false
+         "additionalItems":false
       }
    },
    "definitions":{

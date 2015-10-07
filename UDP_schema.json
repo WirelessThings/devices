@@ -1,0 +1,562 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "http://devices.wirelessthings.net/UDP_schema.json",
+    "title": "Language of Things JSON over UDP packet format",
+    "description": "Used to describe Language of Things messages and other interationc with the Message Bridge",
+    "oneOf":[
+             {"$ref":"#/definitions/WirelessMessage"},
+             {"$ref":"#/definitions/DeviceConfigurationRequest"},
+             {"$ref":"#/definitions/MessageBridge"}
+    ],
+    "definitions": {
+        "validIDCharacters":{
+            "pattern":"^[A-Z0-9\\-@?*\\\\]+$"
+        },
+        "validDataCharacters":{
+            "pattern":"^[A-Z0-9 !#$%&'()*+,.:;<=>?@_`{|}~\"\\-\\[\\]^\\\\\/]+$"
+        },
+        "validTimestamp":{
+            "pattern":""
+        },
+        "WirelessMessage":{
+            "type":"object",
+            "required":["type","network","id","data"],
+            "additionalProperties": false,
+            "properties":{
+                "type":{
+                    "enum":["WirelessMessage"],
+                    "description":"Indicates this is a Language of Things message"
+                },
+                "network":{
+                    "type":"string",
+                    "description":"Inditactes the Message Bridge this packet is tied to, packets on port 50140 this is the source, packets on port 50141 this is the desitnation"
+                },
+                "timestamp":{
+                    "type":"string",
+                    "descriotion":"Orignal time stamp of when this packet was created",
+                    "$ref":"#/definitions/validTimestamp"
+                },
+                "id":{
+                    "type":"string",
+                    "description":"ID of the device",
+                    "$ref":"#/definitions/validIDCharacters"
+                },
+                "data":{
+                    "type":"array",
+                    "description":"Array of one or more commands that will be processed by the MessageBridge, for packets on port 50141 each command is combine with the id field into a Language of Things message \"aIDDATA-----\" and sent out over the radio",
+                    "items":{
+                        "type":"string",
+                        "definition":"Valid Lanugaue of Things data ",
+                        "$ref":"#/definitions/validDataCharacters"
+                    },
+                    "minItems":1,
+                    "additionalItems":false
+                }
+                
+            }
+        },
+        "DeviceConfigurationRequest":{
+            "type":"object",
+            "required":["type","network","data"],
+            "additionalProperties": false,
+            "properties":{
+                "type":{
+                    "enum":["DeviceConfigurationRequest"],
+                    "description":"Indicates this is a Language of Things device configuration request"
+                },
+                "network":{
+                    "type":"string",
+                    "description":"Inditactes the Message Bridge this packet is tied to, packets on port 50140 this is the source, packets on port 50141 this is the desitnation"
+                },
+                "timestamp":{
+                    "type":"string",
+                    "descriotion":"Orignal time stamp of when this packet was created",
+                    "$ref":"#/definitions/validTimestamp"
+                },
+                "data":{
+                    "type":"object",
+                    "description":"",
+                    "required":["toQuery"],
+                    "additionalProperties": false,
+                    "properties":{
+                        "id":{
+                            "type":"string",
+                            "description":"The id field can be use by Device Configuration Wizard to help track request and replies, it will not be altered by the Message Bridge"
+                        },
+                        "devType":{
+                            "type":"string",
+                            "description":"if set the device type will be checked before sending any command"
+                        },
+                        "timeout":{
+                            "type":"integer",
+                            "description":"time out for request, if not supplied the Message Bridge configured default value is used",
+                            "minimum": 1.0
+                        },
+                        "keepAwake":{
+                            "type":"integer",
+                            "description":"use to request or show the state of the keepAwake, 0 off, 1 on",
+                            "enum":[0,1]
+                        },
+                        "state":{
+                            "type":"string",
+                            "description":"use by Message Bridge to show state",
+                            "oneOf":[
+                                     {"enum":["PASS"], "description":"Message Bridge belives all replies are good"},
+                                     {"enum":["FAIL_TIMEOUT"], "description":"request returned incomplete, as timeout T expired. Where T is DCR timeout is specified, otherwise the Message Bridge defualt timeout"},
+                                     {"enum":["FAIL_RETRY"], "description":"request returned incomplete, unable to get an answer to one or more questions after x retries. Where x retries is set via Message Bridge configuration"}
+                                     ]
+                        },
+                        "toQuery":{
+                            "type":"array",
+                            "description":"ordered list of command and value pairs to be sent to a device",
+                            "additionalItems":false,
+                            "minimumItems":1,
+                            "items":{
+                                "type":"object",
+                                "description":"each item must contain a command and optional may inclued a value",
+                                "required":["command"],
+                                "additionalProperties":false,
+                                "properties":{
+                                    "command":{
+                                        "type":"string",
+                                        "description":"Language of Things command to send",
+                                        "$ref":"#/definitions/validDataCharacters"
+                                    },
+                                    "value":{
+                                        "type":"string",
+                                        "description":"value to combine with the command, if not set the command sent on its own",
+                                        "$ref":"#/definitions/validDataCharacters"
+                                    }
+                                }
+                            }
+                        },
+                        "replies":{
+                            "type":"object",
+                            "description":"responses passed back by the Message Bridge, detaling the radios replies to the commands, sotered in a dict keyed by the commands",
+                            "patternProperties": {
+                                "^[A-Z0-9 !#$%&'()*+,.:;<=>?@_`{|}~\"\\-\\[\\]^\\\\\/]+$": {
+                                    "type": "object",
+                                    "description":"single respons",
+                                    "required":["value","reply"],
+                                    "additionalProperties":false,
+                                    "properties":{
+                                        "value":{
+                                            "type":"string",
+                                            "description":"the value that was send with the command",
+                                            "$ref":"#/definitions/validDataCharacters"
+                                        },
+                                        "reply":{
+                                            "type":"string",
+                                            "description":"the replay from that command",
+                                            "$ref":"#/definitions/validDataCharacters"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "MessageBridge":{
+            "type":"object",
+            "required":["type","network"],
+            "additionalProperties": false,
+            "properties":{
+                "type":{
+                    "enum":["MessageBridge"],
+                    "description":"Indicates this is information exchange with the Message Bridge"
+                },
+                "network":{
+                    "type":"string",
+                    "description":"Inditactes the Message Bridge this packet is tied to, packets on port 50140 this is the source, packets on port 50141 this is the desitnation"
+                },
+                "timestamp":{
+                    "type":"string",
+                    "descriotion":"Orignal time stamp of when this packet was created",
+                    "$ref":"#/definitions/validTimestamp"
+                },
+                "state":{
+                    "type":"string",
+                    "description":"Used by the Message Bridge to report its current state",
+                    "oneOf":[
+                             {"enum":["Running"], "description":""},
+                             {"enum":["Error"], "description":""},
+                             {"enum":["Unknown"], "description":""}
+                             ]
+                },
+                "data":{
+                    "type":"object",
+                    "description":"",
+                    "additionalProperties": false,
+                    "properties":{
+                        "id":{
+                            "type":"string",
+                            "description":"The id field can be use by Device Configuration Wizard to help track request and replies, it will not be altered by the Message Bridge"
+                        },
+                        "request":{
+                            "type":"array",
+                            "description":"used to ask the Message Bridge for information",
+                            "additionalItems":false,
+                            "minItems":1,
+                            "uniqueItems":true,
+                            "items":{
+                                "anyOf":[
+                                         {"enum":["deviceStore"], "description":"request the current device store"},
+                                         {"enum":["PANID"], "description":"request the networks PANID (used for seting up new devices ror the network)"},
+                                         {"enum":["encryptionSet"], "description":"request if encryption is enabled on the network"},
+                                         {"enum":["version"], "description":"request the Message Bridge code version"},
+                                         {"enum":["RadioFirmwareVersion"], "description":"request the Firmware version of the radio"}
+                                         ]
+                            }
+                        },
+                        "set":{
+                            "type":"object",
+                            "description":"used to set settings on the Message Bridge (not yet implemented)",
+                            "additionalProperties":false,
+                            "properties":{
+                                "PANID":{
+                                    "type":"string",
+                                    "description":"",
+                                    "$ref":"#/definitions/validDataCharacters"
+                                },
+                                "encryptionSet":{
+                                    "type":"boolean",
+                                    "description":""
+                                },
+                                "encrptionKey":{
+                                    "type":"string",
+                                    "description":"",
+                                    "pattern":"^[A-F0-9]+$"
+                                }
+                            }
+                        },
+                        "result":{
+                            "type":"object",
+                            "description":"results from the Message Bridge to request",
+                            "additionalProperties":false,
+                            "properties":{
+                                "PANID":{
+                                    "type":"string",
+                                    "description":"current PANID, or PANID as a result of a set",
+                                    "$ref":"#/definitions/validDataCharacters"
+                                },
+                                "encryptionSet":{
+                                    "type":"boolean",
+                                    "description":"current encryption state"
+                                },
+                                "encrptionKey":{
+                                    "type":"string",
+                                    "description":"Pass/Fail state for setting encryption key",
+                                    "enum":["Pass", "Fail"]
+                                },
+                                "version":{
+                                    "type":"number",
+                                    "description":"current Message Bridge version",
+                                },
+                                "RadioFirmwareVersion":{
+                                    "type":"string",
+                                    "description":"current Firmware version of the radio"
+                                },
+                                "deviceStore":{
+                                    "type":"object",
+                                    "description":"the device store contains information abbout the last Language of Things message a Message Bridge saw for every device it has heard from since its last reboot",
+                                    "additionalProperties":false,
+                                    "propertiesPattern":{
+                                        "^[A-Z0-9\\-@?*\\\\]+$":{
+                                            "type":"object",
+                                            "decsription":"information is store by device ID, the object will not grow bigger than 656 entries",
+                                            "additionalProperties":false,
+                                            "properties":{
+                                                "data":{
+                                                    "type":"string",
+                                                    "description":"last message seen from the device ID",
+                                                    "$ref":"#/definitions/validDataCharacters"
+                                                },
+                                                "timestamp":{
+                                                    "type":"string",
+                                                    "description":"timestamp of last message",
+                                                    "$ref":"#/definitions/validTimestamp"
+                                                }
+                                                
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }   
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "http://devices.wirelessthings.net/UDP_schema.json",
+    "title": "Language of Things JSON over UDP packet format",
+    "description": "Used to describe Language of Things messages and other interationc with the Message Bridge",
+    "type":"object",
+    "required":["type","network","data"],
+    "additionalProperties": false,
+    "properties":{
+        "type":{
+            "enum":["DeviceConfigurationRequest"],
+            "description":"Indicates this is a Language of Things device configuration request"
+        },
+        "network":{
+            "type":"string",
+            "description":"Inditactes the Message Bridge this packet is tied to, packets on port 50140 this is the source, packets on port 50141 this is the desitnation"
+        },
+        "timestamp":{
+            "type":"string",
+            "descriotion":"Orignal time stamp of when this packet was created",
+            "$ref":"#/definitions/validTimestamp"
+        },
+        "data":{
+            "type":"object",
+            "description":"",
+            "required":["toQuery"],
+            "additionalProperties": false,
+            "properties":{
+                "id":{
+                    "type":"string",
+                    "description":"The id field can be use by Device Configuration Wizard to help track request and replies, it will not be altered by the Message Bridge"
+                },
+                "devType":{
+                    "type":"string",
+                    "description":"if set the device type will be checked before sending any command"
+                },
+                "timeout":{
+                    "type":"integer",
+                    "description":"time out for request, if not supplied the Message Bridge configured default value is used",
+                    "minimum": 1.0
+                },
+                "keepAwake":{
+                    "type":"integer",
+                    "description":"use to request or show the state of the keepAwake, 0 off, 1 on",
+                    "enum":[0,1]
+                },
+                "state":{
+                    "type":"string",
+                    "description":"use by Message Bridge to show state",
+                    "oneOf":[
+                        {"enum":["PASS"], "description":"Message Bridge belives all replies are good"},
+                        {"enum":["FAIL_TIMEOUT"], "description":"request returned incomplete, as timeout T expired. Where T is DCR timeout is specified, otherwise the Message Bridge defualt timeout"},
+                        {"enum":["FAIL_RETRY"], "description":"request returned incomplete, unable to get an answer to one or more questions after x retries. Where x retries is set via Message Bridge configuration"}
+                    ]    
+                },
+                "toQuery":{
+                    "type":"array",
+                    "description":"ordered list of command and value pairs to be sent to a device",
+                    "additionalItems":false,
+                    "minimumItems":1,
+                    "items":{
+                        "type":"object",
+                        "description":"each item must contain a command and optional may inclued a value",
+                        "required":["command"],
+                        "additionalProperties":false,
+                        "properties":{
+                            "command":{
+                                "type":"string",
+                                "description":"Language of Things command to send",
+                                "$ref":"#/definitions/validDataCharacters"
+                            },
+                            "value":{
+                                "type":"string",
+                                "description":"value to combine with the command, if not set the command sent on its own",
+                                "$ref":"#/definitions/validDataCharacters"
+                            }
+                        }
+                    }
+                },
+                "replies":{
+                    "type":"object",
+                    "description":"responses passed back by the Message Bridge, detaling the radios replies to the commands, sotered in a dict keyed by the commands",
+                    "patternProperties": {
+                        "^[A-Z0-9 !#$%&'()*+,.:;<=>?@_`{|}~\"\\-\\[\\]^\\\\\/]+$": {
+                             "type": "object",
+                             "description":"single respons",
+                             "required":["value","reply"],
+                             "additionalProperties":false,
+                             "properties":{
+                                "value":{
+                                    "type":"string",
+                                    "description":"the value that was send with the command",
+                                    "$ref":"#/definitions/validDataCharacters"
+                                },
+                                "reply":{
+                                    "type":"string",
+                                    "description":"the replay from that command",
+                                    "$ref":"#/definitions/validDataCharacters"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+       }
+        
+    },
+    "definitions": {
+        "validIDCharacters":{
+            "pattern":"^[A-Z0-9\\-@?*\\\\]+$"
+        },
+        "validDataCharacters":{
+            "pattern":"^[A-Z0-9 !#$%&'()*+,.:;<=>?@_`{|}~\"\\-\\[\\]^\\\\\/]+$"
+        },
+        "validTimestamp":{
+            "pattern":""
+        }
+    }
+}
+
+
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "http://devices.wirelessthings.net/UDP_schema.json",
+    "title": "Language of Things JSON over UDP packet format",
+    "description": "Used to describe Language of Things messages and other interationc with the Message Bridge",
+    "type":"object",
+    "required":["type","network"],
+    "additionalProperties": false,
+    "properties":{
+        "type":{
+            "enum":["MessageBridge"],
+            "description":"Indicates this is information exchange with the Message Bridge"
+        },
+        "network":{
+            "type":"string",
+            "description":"Inditactes the Message Bridge this packet is tied to, packets on port 50140 this is the source, packets on port 50141 this is the desitnation"
+        },
+        "timestamp":{
+            "type":"string",
+            "descriotion":"Orignal time stamp of when this packet was created",
+            "$ref":"#/definitions/validTimestamp"
+        },
+        "state":{
+            "type":"string",
+            "description":"Used by the Message Bridge to report its current state",
+            "oneOf":[
+                {"enum":["Running"], "description":""},
+                {"enum":["Error"], "description":""},
+                {"enum":["Unknown"], "description":""}
+            ]
+        },
+        "data":{
+            "type":"object",
+            "description":"",
+            "additionalProperties": false,
+            "properties":{
+                "id":{
+                    "type":"string",
+                    "description":"The id field can be use by Device Configuration Wizard to help track request and replies, it will not be altered by the Message Bridge"
+                },
+                "request":{
+                    "type":"array",
+                    "description":"used to ask the Message Bridge for information",
+                    "additionalItems":false,
+                    "minItems":1,
+                    "uniqueItems":true,
+                    "items":{
+                        "anyOf":[
+                           {"enum":["deviceStore"], "description":"request the current device store"},
+                           {"enum":["PANID"], "description":"request the networks PANID (used for seting up new devices ror the network)"},
+                           {"enum":["encryptionSet"], "description":"request if encryption is enabled on the network"},
+                           {"enum":["version"], "description":"request the Message Bridge code version"},
+                           {"enum":["RadioFirmwareVersion"], "description":"request the Firmware version of the radio"}
+                        ]
+                    }
+                },
+                "set":{
+                    "type":"object",
+                    "description":"used to set settings on the Message Bridge (not yet implemented)",
+                    "additionalProperties":false,
+                    "properties":{
+                        "PANID":{
+                            "type":"string",
+                            "description":"",
+                            "$ref":"#/definitions/validDataCharacters"
+                        },
+                        "encryptionSet":{
+                            "type":"boolean",
+                            "description":""
+                        },
+                        "encrptionKey":{
+                            "type":"string",
+                            "description":"",
+                            "pattern":"^[A-F0-9]+$"
+                        }      
+                    }
+                },
+                "result":{
+                    "type":"object",
+                    "description":"results from the Message Bridge to request",
+                    "additionalProperties":false,
+                    "properties":{
+                        "PANID":{
+                            "type":"string",
+                            "description":"current PANID, or PANID as a result of a set",
+                            "$ref":"#/definitions/validDataCharacters"
+                        },
+                        "encryptionSet":{
+                            "type":"boolean",
+                            "description":"current encryption state"
+                        },
+                        "encrptionKey":{
+                            "type":"string",
+                            "description":"Pass/Fail state for setting encryption key",
+                            "enum":["Pass", "Fail"]
+                        },
+                        "version":{
+                            "type":"number",
+                            "description":"current Message Bridge version",
+                        },
+                        "RadioFirmwareVersion":{
+                            "type":"string",
+                            "description":"current Firmware version of the radio"
+                        },
+                        "deviceStore":{
+                            "type":"object",
+                            "description":"the device store contains information abbout the last Language of Things message a Message Bridge saw for every device it has heard from since its last reboot",
+                            "additionalProperties":false,
+                            "propertiesPattern":{
+                                "^[A-Z0-9\\-@?*\\\\]+$":{
+                                    "type":"object",
+                                    "decsription":"information is store by device ID, the object will not grow bigger than 656 entries",
+                                    "additionalProperties":false,
+                                    "properties":{
+                                        "data":{
+                                            "type":"string",
+                                            "description":"last message seen from the device ID",
+                                            "$ref":"#/definitions/validDataCharacters"
+                                        },
+                                        "timestamp":{
+                                            "type":"string",
+                                            "description":"timestamp of last message",
+                                            "$ref":"#/definitions/validTimestamp"
+                                        }
+                                          
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }   
+            }
+        }
+    },
+    "definitions": {
+        "validIDCharacters":{
+            "pattern":"^[A-Z0-9\\-@?*\\\\]+$"
+        },
+        "validDataCharacters":{
+            "pattern":"^[A-Z0-9 !#$%&'()*+,.:;<=>?@_`{|}~\"\\-\\[\\]^\\\\\/]+$"
+        },
+        "validTimestamp":{
+            "pattern":""
+        }
+    }
+}
