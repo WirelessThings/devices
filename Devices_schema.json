@@ -189,13 +189,13 @@
             {"enum":["ONOFF"], "description":"Either ON or OFF (boolean)"},
             {"enum":["ONOFFTOG"], "description":"Either ON, OFF or TOG. (TOG switches the current value between ON or OFF)"},
             {"enum":["ID"], "description":"Two character device ID of any valid Language of Things ID characters"},
-            {"enum":["Hex"], "description":"Hexadecimal value"
-            },
-            {{"enum":["ReadOnlyHex"], "description":"Hexadecimal value that can only be read"
-                  },
+            {"enum":["Hex"], "description":"Hexadecimal value"},
+            {"enum":["ReadOnlyHex"], "description":"Hexadecimal value that can only be read"},
             {"enum":["Period"], "description":"Period of time represented as 3 digit value and period multiplier of T(milli seconds), S(seconds), M(minutes), H(hours), D(days)"},
             {"enum":["SleepMode"], "description":"Sleep mode represented as one of the follow. Sleep Off = 0 \n Interrupt = 8 \n Cyclic = 16 \n Polled = 32"},
-            {"enum":["ENKey"], "description":"Hexadecimal string when sent to a radio, ACK in response"}
+            {"enum":["ENKey"], "description":"Hexadecimal string when sent to a radio, ACK in response"},
+            {"enum":["HeatingSetPoint"], "description":"Heating set point in formate of DSHHMMTT, where D Day of the week (1=Monday, 8=Holiday), S Set point (1-6), HH Hours (24H), MM Minutes, TT Temperature"},
+            {"enum":["WaterSetPoint"], "description":"Water set point in formate of DSHHMMOO, where D Day of the week (1=Monday, 8=Holiday), S Set point (1-6), HH Hours (24H), MM Minutes, OO ON OF"}
          ]
       },
       "validIDCharacters":{
