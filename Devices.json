@@ -159,8 +159,8 @@
       {
          "DTY":"AAAV01",
          "Name":"Button KeyFob",
-         "Description":"Note pressing and holding any button for 5 seconds will enter config mode (this is in addition to the normal config button).",
-         "LongDescription":"Note pressing and holding any button for 5 seconds will enter config mode (this is in addition to the normal config button).",
+         "Description":"The Wireless KeyFob can have one to five buttons depending on the model, each sends its own Language of Things message that can be used to control our other devices or any other system you can think of.",
+         "LongDescription":"The Wireless KeyFob can have one to five buttons depending on the model, each sends its own Language of Things message that can be used to control our other devices or any other system you can think of. Examples include switching a device on/off to sending an email. Buttons are identified by the letters A to E. A full five button key fob starts with A in the middle and then B at the top, C, D and E are clockwise from there. A three button key fob (horizontal layout) will thus have button E at the left, button A in the centre and button C at the right.",
          "SleepMode":"Interrupt",
          "PowerClass":"SB",
          "AntennaClass":"CA",
