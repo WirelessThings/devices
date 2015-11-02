@@ -1,5 +1,5 @@
 {
-   "Version":151013,
+   "Version":151102,
    "Devices":[
       {
          "DTY":"AAAB01",
@@ -208,6 +208,33 @@
                "Description":"Set the calibration value – this is a floating point number and the measured LUX will be multiplied by this value to give the calibrated LUX. This is to allow for the attenuation of the box and slots as well as the positioning of the sensor.",
                "Format":"Float"
             }
+         ]
+      },
+      {
+         "DTY":"AAAR01",
+         "Name":"Barometric Pressure and Temperature sensor",
+         "Description":"This Barometric Pressure and Temperature device sends periodic reading of Pressure in millibars (hPa) and Temerature in degrees centigrade",
+              "LongDescription":"Using the high accuracy MPL3115A2 this devce gives Barometric Pressure in millibars (hPa) and Temerature in degrees centigrade. Relative accuracy during pressure change between 70 to 110 kPa at any constant temperature between -10 °C to 50 °C is +-0.05kPa (or +-0.5 millibar). Relative accuracy during changing temperature between -10 °C to 50 °C at any constant pressure between 50 kPa to 110 kPa is +- 0.1kPa (or +-1millibar). Resolution accuracy is typically 1.5Pa. Temperature accuracy is  +-1 degree C at 25 degrees, and +-3 degrees over the temperature range.",
+         "SleepMode":"Cyclic",
+         "ReadingPeriod":1,
+         "PowerClass":"LB",
+         "AntennaClass":"CA",
+         "Actions":[
+            {
+               "Command":"BAR",
+               "Description":"Return the current pressure in millibars (hPa)",
+               "Format":"Float",
+               "Type":"Both"
+            },
+            {
+               "Command":"TEMP",
+               "Description":"Return the current temperature in degrees centigrade",
+               "Format":"Float",
+               "Type":"Both"
+            }
+         ],
+         "Options":[
+
          ]
       }
    ]
