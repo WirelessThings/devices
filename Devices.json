@@ -236,6 +236,46 @@
          "Options":[
 
          ]
+      },
+      {
+         "DTY":"AAAH01",
+         "Name":"Dual State Switch Sensor",
+         "Description":"Dual State Switch Sensor takes an input reading (from a switch it is wired to) to alert you of the switches change of state. (i.e from OPEN to CLOSED",
+         "LongDescription":"Dual State Switch Sensor takes an input reading (from a switch it is wired to) to alert you of the switches change of state. (i.e from OPEN to CLOSED",
+         "SleepMode":"Cyclic",
+         "ReadingPeriod":1,
+         "PowerClass":"SB",
+         "AntennaClass":"CA",
+         "Actions":[
+            {
+               "Command":"SWITCH",
+               "Description":"Switch state, note actual command name can be set via MSG option",
+               "Format":"ONOFF",
+               "Type":"Announce"
+            }
+         ],
+         "Options":[
+            {
+               "Command":"MSG",
+               "Description":"Set message (Default SWITCH)",
+               "Format":"String"
+            },
+            {
+               "Command":"DEB",
+               "Description":"Sensor debounce in mS (Default 30)",
+               "Format":"Int"
+            },
+            {
+               "Command":"STS",
+               "Description":"Sleep period whilst debouncing (Default 10)",
+               "Format":"Int"
+            },
+            {
+               "Command":"WOS",
+               "Description":"Sleep period whilst waiting for sensor to return to off (Default 100)",
+               "Format":"Int"
+            }
+         ]
       }
    ]
 }
