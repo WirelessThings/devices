@@ -276,6 +276,46 @@
                "Format":"Int"
             }
          ]
+      },
+      {
+         "DTY":"AAAY01",
+         "Name":"Tilt Switch Sensor",
+         "Description":"Tilt Switch Sensor takes an input reading from a tilt sensor when disturbed, (similar to a ball bearing in a tube) to alert you of the devices movement",
+         "LongDescription":"Tilt Switch Sensor takes an input reading from a tilt sensor when disturbed, (similar to a ball bearing in a tube) to alert you of the devices movement",
+        "SleepMode":"Cyclic",
+         "ReadingPeriod":1,
+         "PowerClass":"SB",
+         "AntennaClass":"CA",
+         "Actions":[
+            {
+               "Command":"TILT",
+               "Description":"Tilt state, note actual command name can be set via MSG option",
+               "Format":"ONOFF",
+               "Type":"Announce"
+            }
+         ],
+         "Options":[
+            {
+               "Command":"MSG",
+               "Description":"Set message (Default TILT)",
+               "Format":"String"
+            },
+            {
+               "Command":"DEB",
+               "Description":"Sensor debounce in mS (Default 30)",
+               "Format":"Int"
+            },
+            {
+               "Command":"STS",
+               "Description":"Sleep period whilst debouncing (Default 10)",
+               "Format":"Int"
+            },
+            {
+               "Command":"WOS",
+               "Description":"Sleep period whilst waiting for sensor to return to off (Default 100)",
+               "Format":"Int"
+            }
+         ]
       }
    ]
 }
