@@ -1,6 +1,22 @@
 {
-   "Version":151102,
+   "Version":160210,
    "Devices":[
+      {
+         "DTY":"",
+         "Name":"Unknown Device",
+         "Description":"Unable to identify your device",
+         "LongDescription":"Unable to identify your device",
+         "SleepMode":"Polled",
+         "ReadingPeriod":0,
+         "PowerClass":"",
+         "AntennaClass":"",
+         "Actions":[
+
+         ],
+         "Options":[
+
+         ]
+      },
       {
          "DTY":"AAAB01",
          "Name":"Temperature Sensor",
