@@ -1,5 +1,5 @@
 {
-   "Version":160210,
+   "Version":160704,
    "Devices":[
       {
          "DTY":"",
@@ -289,6 +289,41 @@
             {
                "Command":"WOS",
                "Description":"Sleep period whilst waiting for sensor to return to off (Default 100)",
+               "Format":"Int"
+            }
+         ]
+      },
+      {
+         "DTY":"AAAA01",
+         "Name":"Flood Sensor",
+         "Description":"Flood Sensor",
+         "LongDescription":"Flood Sensor",
+         "SleepMode":"Cyclic",
+         "ReadingPeriod":1,
+         "PowerClass":"SB",
+         "AntennaClass":"CA",
+         "Actions":[
+            {
+               "Command":"FLOOD",
+               "Description":"Flood sensor state, note actual command name can be set via MSG option",
+               "Format":"ALRTOFF",
+               "Type":"Announce"
+            }
+         ],
+         "Options":[
+            {
+               "Command":"MSG",
+               "Description":"Set message (Default FLOOD)",
+               "Format":"String"
+            },
+            {
+               "Command":"DEB",
+               "Description":"Sensor debounce in mS (Default 60000)",
+               "Format":"Int"
+            },
+            {
+               "Command":"STS",
+               "Description":"Sleep period whilst debouncing (Default 5000)",
                "Format":"Int"
             }
          ]
