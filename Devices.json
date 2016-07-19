@@ -1,5 +1,5 @@
 {
-   "Version":160704,
+   "Version":160719,
    "Devices":[
       {
          "DTY":"",
@@ -197,6 +197,42 @@
             {
                "Command":"DEB",
                "Description":"Button debounce in mS (Default 50)",
+               "Format":"Int"
+            }
+         ]
+      },
+      {
+         "DTY":"AAAL01",
+         "Name":"Optical Pulse Counter",
+         "Description":"Optical Pulse Counter",
+         "LongDescription":"Optical Pulse Counter",
+         "SleepMode":"Cyclic",
+         "ReadingPeriod":1,
+         "PowerClass":"LB",
+         "AntennaClass":"CA",
+         "Actions":[
+            {
+               "Command":"VAL",
+               "Description":"Return the count value",
+               "Format":"Int",
+               "Type":"Both"
+            },
+            {
+               "Command":"RESET",
+               "Description":"Resets the count to 0",
+               "Format":"Int",
+               "Type":"Polled"
+            }
+         ],
+         "Options":[
+            {
+               "Command":"DEB",
+               "Description":"Pulse debounce in mS (Default 30)",
+               "Format":"Int"
+            },
+            {
+               "Command":"TRG",
+               "Description":"Count trigger level",
                "Format":"Int"
             }
          ]
