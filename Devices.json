@@ -238,6 +238,68 @@
          ]
       },
       {
+         "DTY":"AAAL02",
+         "Name":"Optical Pulse Counter",
+         "Description":"Optical Pulse Counter",
+         "LongDescription":"Optical Pulse Counter",
+         "SleepMode":"Cyclic",
+         "ReadingPeriod":1,
+         "PowerClass":"LB",
+         "AntennaClass":"CA",
+         "Actions":[
+            {
+               "Command":"VAL",
+               "Description":"Return the count value",
+               "Format":"Int",
+               "Type":"Both"
+            },
+            {
+               "Command":"RESET",
+               "Description":"Resets the count to 0",
+               "Format":"Int",
+               "Type":"Polled"
+            }
+         ],
+         "Options":[
+            {
+               "Command":"TRG",
+               "Description":"Count trigger level",
+               "Format":"Int"
+            }
+         ]
+      },
+      {
+         "DTY":"AAAL03",
+         "Name":"Optical Pulse Counter",
+         "Description":"Optical Pulse Counter",
+         "LongDescription":"Optical Pulse Counter",
+         "SleepMode":"Cyclic",
+         "ReadingPeriod":1,
+         "PowerClass":"LB",
+         "AntennaClass":"CA",
+         "Actions":[
+            {
+               "Command":"VAL",
+               "Description":"Return the count value",
+               "Format":"Int",
+               "Type":"Both"
+            },
+            {
+               "Command":"RESET",
+               "Description":"Resets the count to 0",
+               "Format":"Int",
+               "Type":"Polled"
+            }
+         ],
+         "Options":[
+            {
+               "Command":"TRG",
+               "Description":"Count trigger level",
+               "Format":"Int"
+            }
+         ]
+      },
+      {
          "DTY":"AAAX01",
          "Name":"Lux light level sensor",
          "Description":"This Lux Light Sensor device sends periodic readings of light in LUX.",
